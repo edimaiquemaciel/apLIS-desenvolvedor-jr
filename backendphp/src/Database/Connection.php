@@ -11,10 +11,10 @@ class Connection
     public static function getInstance(): \PDO
     {
         if (self::$instance === null) {
-            $host = 'localhost';
-            $db   = 'clinica';
-            $user = 'root';
-            $pass = '2607';
+            $host = getenv('DB_HOST');
+            $db   = getenv('DB_NAME');
+            $user = getenv('DB_USER');
+            $pass = getenv('DB_PASS');
 
             self::$instance = new \PDO(
                 "mysql:host=$host;dbname=$db;charset=utf8",
