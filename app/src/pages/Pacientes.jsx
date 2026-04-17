@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getPacientes, createPaciente } from '../services/api';
+import { getPacientes, createPaciente, updatePaciente, deletePaciente } from '../services/api';
 
 function Pacientes() {
     const [pacientes, setPacientes] = useState([]);
@@ -9,6 +9,7 @@ function Pacientes() {
     const [cpf, setCpf] = useState('');
     const [mensagem, setMensagem] = useState('');
     const [recarregar, setRecarregar] = useState(0);
+    const [editando, setEditando] = useState(null);
 
     useEffect(() => {
         getPacientes()
@@ -16,18 +17,53 @@ function Pacientes() {
             .catch(() => setMensagem('Erro ao buscar pacientes'));
     }, [recarregar]);
 
+    function handleEditar(paciente) {
+        setEditando(paciente.id);
+        setNome(paciente.nome);
+        setDataNascimento(paciente.dataNascimento ? paciente.dataNascimento.split('T')[0] : '');
+        setCarteirinha(paciente.carteirinha);
+        setCpf(paciente.cpf);
+    }
+
+    function handleCancelar() {
+        setEditando(null);
+        setNome('');
+        setDataNascimento('');
+        setCarteirinha('');
+        setCpf('');
+        setMensagem('');
+    }
+
+    async function handleDeletar(id) {
+        if (!confirm('Deseja deletar este paciente?')) return;
+        try {
+            await deletePaciente(id);
+            setMensagem('Paciente deletado com sucesso!');
+            setRecarregar((prev) => prev + 1);
+        } catch (error) {
+            setMensagem('Erro ao deletar paciente');
+            console.error(error);
+        }
+    }
+
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            await createPaciente({ nome, dataNascimento, carteirinha, cpf });
-            setMensagem('Paciente criado com sucesso!');
+            if (editando) {
+                await updatePaciente(editando, { nome, dataNascimento, carteirinha, cpf });
+                setMensagem('Paciente atualizado com sucesso!');
+                setEditando(null);
+            } else {
+                await createPaciente({ nome, dataNascimento, carteirinha, cpf });
+                setMensagem('Paciente criado com sucesso!');
+            }
             setNome('');
             setDataNascimento('');
             setCarteirinha('');
             setCpf('');
             setRecarregar((prev) => prev + 1);
         } catch (error) {
-            setMensagem('Erro ao criar paciente');
+            setMensagem('Erro ao salvar paciente');
             console.error(error);
         }
     }
@@ -46,7 +82,6 @@ function Pacientes() {
                 />
                 <input
                     type="date"
-                    placeholder="Data de Nascimento"
                     value={dataNascimento}
                     onChange={(e) => setDataNascimento(e.target.value)}
                     style={{ padding: '8px', borderRadius: '6px', border: '1px solid #ccc' }}
@@ -60,17 +95,28 @@ function Pacientes() {
                 />
                 <input
                     type="text"
-                    placeholder="CPF"
+                    placeholder="CPF (11 dígitos)"
                     value={cpf}
                     onChange={(e) => setCpf(e.target.value)}
                     style={{ padding: '8px', borderRadius: '6px', border: '1px solid #ccc' }}
                 />
-                <button
-                    type="submit"
-                    style={{ padding: '10px', background: '#534AB7', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
-                >
-                    Cadastrar
-                </button>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    <button
+                        type="submit"
+                        style={{ flex: 1, padding: '10px', background: '#534AB7', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                    >
+                        {editando ? 'Atualizar' : 'Cadastrar'}
+                    </button>
+                    {editando && (
+                        <button
+                            type="button"
+                            onClick={handleCancelar}
+                            style={{ flex: 1, padding: '10px', background: '#888', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                        >
+                            Cancelar
+                        </button>
+                    )}
+                </div>
                 {mensagem && <p style={{ color: mensagem.includes('Erro') ? 'red' : 'green' }}>{mensagem}</p>}
             </form>
 
@@ -81,6 +127,7 @@ function Pacientes() {
                         <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Data de Nascimento</th>
                         <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Carteirinha</th>
                         <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>CPF</th>
+                        <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -88,10 +135,24 @@ function Pacientes() {
                         <tr key={paciente.id}>
                             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{paciente.nome}</td>
                             <td style={{ padding: '10px', border: '1px solid #ddd' }}>
-    {paciente.dataNascimento ? new Date(paciente.dataNascimento).toLocaleDateString('pt-BR') : '-'}
-</td>
+                                {paciente.dataNascimento ? new Date(paciente.dataNascimento).toLocaleDateString('pt-BR') : '-'}
+                            </td>
                             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{paciente.carteirinha}</td>
                             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{paciente.cpf}</td>
+                            <td style={{ padding: '10px', border: '1px solid #ddd', display: 'flex', gap: '8px' }}>
+                                <button
+                                    onClick={() => handleEditar(paciente)}
+                                    style={{ padding: '6px 12px', background: '#EF9F27', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                                >
+                                    Editar
+                                </button>
+                                <button
+                                    onClick={() => handleDeletar(paciente.id)}
+                                    style={{ padding: '6px 12px', background: '#E24B4A', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                                >
+                                    Deletar
+                                </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
