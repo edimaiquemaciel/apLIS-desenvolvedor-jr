@@ -31,4 +31,24 @@ class Medico
             ':UFCRM' => $data['UFCRM'],
         ]);
     }
+
+    public function update(int $id, array $data): void
+    {
+        $stmt = $this->db->prepare(
+            'UPDATE medicos SET nome = :nome, CRM = :CRM, UFCRM = :UFCRM WHERE id = :id'
+        );
+
+        $stmt->execute([
+            ':nome'  => $data['nome'],
+            ':CRM'   => $data['CRM'],
+            ':UFCRM' => $data['UFCRM'],
+            ':id'    => $id,
+        ]);
+    }
+
+    public function delete(int $id): void
+    {
+        $stmt = $this->db->prepare('DELETE FROM medicos WHERE id = :id');
+        $stmt->execute([':id' => $id]);
+    }
 }

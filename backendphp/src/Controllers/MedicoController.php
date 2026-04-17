@@ -39,4 +39,31 @@ class MedicoController
         header('Content-Type: application/json');
         echo json_encode(['mensagem' => 'Médico criado com sucesso']);
     }
+
+    public function update(int $id): void
+    {
+        $body = json_decode(file_get_contents('php://input'), true);
+
+        if (empty($body['nome']) || empty($body['CRM']) || empty($body['UFCRM'])) {
+            http_response_code(400);
+            header('Content-Type: application/json');
+            echo json_encode(['mensagem' => 'Campos obrigatórios: nome, CRM, UFCRM']);
+            return;
+        }
+
+        $this->medico->update($id, $body);
+
+        http_response_code(200);
+        header('Content-Type: application/json');
+        echo json_encode(['mensagem' => 'Médico atualizado com sucesso']);
+    }
+
+    public function destroy(int $id): void
+    {
+        $this->medico->delete($id);
+
+        http_response_code(200);
+        header('Content-Type: application/json');
+        echo json_encode(['mensagem' => 'Médico deletado com sucesso']);
+    }
 }
