@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getPacientes, createPaciente, updatePaciente, deletePaciente } from '../services/api';
 
 function Pacientes() {
+    const { t } = useTranslation();
     const [pacientes, setPacientes] = useState([]);
     const [nome, setNome] = useState('');
     const [dataNascimento, setDataNascimento] = useState('');
@@ -14,8 +16,8 @@ function Pacientes() {
     useEffect(() => {
         getPacientes()
             .then((response) => setPacientes(response.data))
-            .catch(() => setMensagem('Erro ao buscar pacientes'));
-    }, [recarregar]);
+            .catch(() => setMensagem(t('pacientes.erroBuscar')));
+    }, [recarregar, t]);
 
     function handleEditar(paciente) {
         setEditando(paciente.id);
@@ -35,14 +37,15 @@ function Pacientes() {
     }
 
     async function handleDeletar(id) {
-        if (!confirm('Deseja deletar este paciente?')) return;
+        if (!confirm(t('pacientes.confirmDeletar'))) return;
         try {
             await deletePaciente(id);
-            setMensagem('Paciente deletado com sucesso!');
+            setMensagem(t('pacientes.deletadoSucesso'));
             setRecarregar((prev) => prev + 1);
         } catch (error) {
-            setMensagem('Erro ao deletar paciente');
+            setMensagem(t('pacientes.erroDeletar'));
             console.error(error);
+            
         }
     }
 
@@ -51,11 +54,11 @@ function Pacientes() {
         try {
             if (editando) {
                 await updatePaciente(editando, { nome, dataNascimento, carteirinha, cpf });
-                setMensagem('Paciente atualizado com sucesso!');
+                setMensagem(t('pacientes.atualizadoSucesso'));
                 setEditando(null);
             } else {
                 await createPaciente({ nome, dataNascimento, carteirinha, cpf });
-                setMensagem('Paciente criado com sucesso!');
+                setMensagem(t('pacientes.cadastradoSucesso'));
             }
             setNome('');
             setDataNascimento('');
@@ -63,19 +66,19 @@ function Pacientes() {
             setCpf('');
             setRecarregar((prev) => prev + 1);
         } catch (error) {
-            setMensagem('Erro ao salvar paciente');
+            setMensagem(t('pacientes.erroSalvar'));
             console.error(error);
         }
     }
 
     return (
         <div style={{ padding: '24px', flex: 1 }}>
-            <h1 style={{ marginBottom: '24px' }}>Pacientes</h1>
+            <h1 style={{ marginBottom: '24px' }}>{t('pacientes.titulo')}</h1>
 
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '400px', marginBottom: '32px' }}>
                 <input
                     type="text"
-                    placeholder="Nome"
+                    placeholder={t('pacientes.nome')}
                     value={nome}
                     onChange={(e) => setNome(e.target.value)}
                     style={{ padding: '8px', borderRadius: '6px', border: '1px solid #ccc' }}
@@ -88,14 +91,14 @@ function Pacientes() {
                 />
                 <input
                     type="text"
-                    placeholder="Carteirinha"
+                    placeholder={t('pacientes.carteirinha')}
                     value={carteirinha}
                     onChange={(e) => setCarteirinha(e.target.value)}
                     style={{ padding: '8px', borderRadius: '6px', border: '1px solid #ccc' }}
                 />
                 <input
                     type="text"
-                    placeholder="CPF (11 dígitos)"
+                    placeholder={t('pacientes.cpf')}
                     value={cpf}
                     onChange={(e) => setCpf(e.target.value)}
                     style={{ padding: '8px', borderRadius: '6px', border: '1px solid #ccc' }}
@@ -105,7 +108,7 @@ function Pacientes() {
                         type="submit"
                         style={{ flex: 1, padding: '10px', background: '#534AB7', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
                     >
-                        {editando ? 'Atualizar' : 'Cadastrar'}
+                        {editando ? t('pacientes.atualizar') : t('pacientes.cadastrar')}
                     </button>
                     {editando && (
                         <button
@@ -113,21 +116,21 @@ function Pacientes() {
                             onClick={handleCancelar}
                             style={{ flex: 1, padding: '10px', background: '#888', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
                         >
-                            Cancelar
+                            {t('pacientes.cancelar')}
                         </button>
                     )}
                 </div>
-                {mensagem && <p style={{ color: mensagem.includes('Erro') ? 'red' : 'green' }}>{mensagem}</p>}
+                {mensagem && <p style={{ color: mensagem.includes('Erro') || mensagem.includes('Error') ? 'red' : 'green' }}>{mensagem}</p>}
             </form>
 
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
                     <tr style={{ background: '#f5f5f5' }}>
-                        <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Nome</th>
-                        <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Data de Nascimento</th>
-                        <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Carteirinha</th>
-                        <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>CPF</th>
-                        <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Ações</th>
+                        <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>{t('pacientes.nome')}</th>
+                        <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>{t('pacientes.dataNascimento')}</th>
+                        <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>{t('pacientes.carteirinha')}</th>
+                        <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>{t('pacientes.cpf')}</th>
+                        <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>{t('pacientes.acoes')}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -144,13 +147,13 @@ function Pacientes() {
                                     onClick={() => handleEditar(paciente)}
                                     style={{ padding: '6px 12px', background: '#EF9F27', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
                                 >
-                                    Editar
+                                    {t('pacientes.editar')}
                                 </button>
                                 <button
                                     onClick={() => handleDeletar(paciente.id)}
                                     style={{ padding: '6px 12px', background: '#E24B4A', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
                                 >
-                                    Deletar
+                                    {t('pacientes.deletar')}
                                 </button>
                             </td>
                         </tr>

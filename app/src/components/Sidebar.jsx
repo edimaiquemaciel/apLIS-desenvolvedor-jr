@@ -1,4 +1,12 @@
+import { useTranslation } from 'react-i18next';
+
 function Sidebar({ paginaAtual, setPagina }) {
+    const { t, i18n } = useTranslation();
+
+    function toggleIdioma() {
+        i18n.changeLanguage(i18n.language === 'pt' ? 'en' : 'pt');
+    }
+
     return (
         <aside style={{
             width: '200px',
@@ -24,7 +32,7 @@ function Sidebar({ paginaAtual, setPagina }) {
                     fontSize: '14px',
                 }}
             >
-                Médicos
+                {t('menu.medicos')}
             </button>
 
             <button
@@ -40,7 +48,23 @@ function Sidebar({ paginaAtual, setPagina }) {
                     fontSize: '14px',
                 }}
             >
-                Pacientes
+                {t('menu.pacientes')}
+            </button>
+
+            <button
+                onClick={toggleIdioma}
+                style={{
+                    marginTop: 'auto',
+                    background: 'transparent',
+                    color: '#aaa',
+                    border: '1px solid #444',
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                }}
+            >
+                {i18n.language === 'pt' ? '🇧🇷 PT' : '🇺🇸 EN'}
             </button>
         </aside>
     );
