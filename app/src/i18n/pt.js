@@ -21,6 +21,12 @@ export default {
         erroSalvar: 'Erro ao salvar médico',
         erroDeletar: 'Erro ao deletar médico',
         confirmDeletar: 'Deseja deletar este médico?',
+        selecioneUf: 'Selecione a UF',
+        nomeObrigatorio: 'O nome é obrigatório',
+        crmNumero: 'O CRM deve ser um número',
+        crmTamanho: 'O CRM deve ter 6 dígitos',
+        ufObrigatorio: 'Selecione uma UF',
+        salvando: 'Salvando...',
     },
     pacientes: {
         titulo: 'Pacientes',
