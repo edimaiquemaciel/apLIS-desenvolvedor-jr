@@ -16,7 +16,10 @@ function App() {
                 aberto={aberto}
                 setAberto={setAberto}
             />
-            <Box sx={{ flex: 1, transition: 'margin 0.3s' }}>
+
+            <Box
+                sx={{ flex: 1, transition: 'margin 0.3s' }}
+            >
                 {pagina === 'medicos' && <Medicos />}
                 {pagina === 'pacientes' && <Pacientes />}
             </Box>
