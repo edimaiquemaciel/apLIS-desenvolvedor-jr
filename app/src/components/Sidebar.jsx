@@ -7,7 +7,6 @@ import {
     ListItemIcon,
     ListItemText,
     Typography,
-    Button,
     Divider,
     Box,
     IconButton,
@@ -18,7 +17,6 @@ import LanguageIcon from '@mui/icons-material/Language';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MenuIcon from '@mui/icons-material/Menu';
 
-// ← Exportamos as constantes (obrigatório para o App usar)
 export const drawerWidth = 240;
 export const drawerWidthClosed = 64;
 
@@ -29,7 +27,6 @@ function Sidebar({ paginaAtual, setPagina, aberto, setAberto }) {
         i18n.changeLanguage(i18n.language === 'pt' ? 'en' : 'pt');
     }
 
-    // Estilo comum para o texto que desliza suavemente
     const textContainerStyle = {
         whiteSpace: 'nowrap',
         overflow: 'hidden',
@@ -49,13 +46,12 @@ function Sidebar({ paginaAtual, setPagina, aberto, setAberto }) {
                 '& .MuiDrawer-paper': {
                     width: aberto ? drawerWidth : drawerWidthClosed,
                     boxSizing: 'border-box',
-                    background: '#1e1e2e',
-                    color: '#fff',
+                    background: '#ffffff', // Fundo branco clínico
+                    color: '#2f3f35',      // Texto verde escuro acinzentado
                     overflowX: 'hidden',
                     transition: 'width 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-                    borderRight: 'none',
+                    borderRight: '1px solid #e0e7e1', // Borda lateral suave
                 },
-                // ← Adicionado de volta (melhora a estabilidade da animação)
                 transition: 'width 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
             }}
         >
@@ -70,18 +66,18 @@ function Sidebar({ paginaAtual, setPagina, aberto, setAberto }) {
                 }}
             >
                 <Box sx={{...textContainerStyle}}>
-                    <Typography variant="h6" sx={{ color: "#fff", fontWeight: "bold", textAlign: "center"  }}>
+                    <Typography variant="h6" sx={{ color: "#2e7d32", fontWeight: "bold", textAlign: "center" }}>
                         Menu
                     </Typography>
                 </Box>
 
-                <IconButton onClick={() => setAberto(!aberto)} sx={{ color: "#fff", mr: aberto ? 1 : 0, paddingLeft: "10px" }}>
+                <IconButton onClick={() => setAberto(!aberto)} sx={{ color: "#78909c", mr: aberto ? 1 : 0, paddingLeft: "10px" }}>
                     {aberto ? <ChevronLeftIcon /> : <MenuIcon />}
                 </IconButton>
                 
             </Box>
 
-            <Divider sx={{ borderColor: "#444" }} />
+            <Divider sx={{ borderColor: "#f0f4f0" }} />
 
             <List>
                 {/* Médicos */}
@@ -90,9 +86,10 @@ function Sidebar({ paginaAtual, setPagina, aberto, setAberto }) {
                         selected={paginaAtual === "medicos"}
                         onClick={() => setPagina("medicos")}
                         sx={{
-                            "&.Mui-selected": { background: "#534AB7" },
-                            "&.Mui-selected:hover": { background: "#6259c7" },
-                            "&:hover": { background: "#2a2a3e" },
+                            "&.Mui-selected": { background: "#e8f5e9", color: "#2e7d32" }, // Verde claro ao selecionar
+                            "&.Mui-selected:hover": { background: "#c8e6c9" },
+                            "&:hover": { background: "#f1f8f1" },
+                            "& .MuiListItemIcon-root": { color: paginaAtual === "medicos" ? "#2e7d32" : "#78909c" },
                             borderRadius: "8px",
                             margin: "4px 8px",
                             justifyContent: "flex-start",
@@ -100,11 +97,11 @@ function Sidebar({ paginaAtual, setPagina, aberto, setAberto }) {
                             minHeight: '48px',
                         }}
                     >
-                        <ListItemIcon sx={{ color: "#fff", minWidth: "40px", display: 'flex', justifyContent: 'center' }}>
+                        <ListItemIcon sx={{ minWidth: "40px", display: 'flex', justifyContent: 'center' }}>
                             <LocalHospitalIcon />
                         </ListItemIcon>
                         <Box sx={textContainerStyle}>
-                            <ListItemText primary={t("menu.medicos")} sx={{ color: "#fff", m: 0 }} />
+                            <ListItemText primary={t("menu.medicos")} sx={{ m: 0 }} />
                         </Box>
                     </ListItemButton>
                 </ListItem>
@@ -115,9 +112,10 @@ function Sidebar({ paginaAtual, setPagina, aberto, setAberto }) {
                         selected={paginaAtual === "pacientes"}
                         onClick={() => setPagina("pacientes")}
                         sx={{
-                            "&.Mui-selected": { background: "#534AB7" },
-                            "&.Mui-selected:hover": { background: "#6259c7" },
-                            "&:hover": { background: "#2a2a3e" },
+                            "&.Mui-selected": { background: "#e8f5e9", color: "#2e7d32" },
+                            "&.Mui-selected:hover": { background: "#c8e6c9" },
+                            "&:hover": { background: "#f1f8f1" },
+                            "& .MuiListItemIcon-root": { color: paginaAtual === "pacientes" ? "#2e7d32" : "#78909c" },
                             borderRadius: "8px",
                             margin: "4px 8px",
                             justifyContent: "flex-start",
@@ -125,11 +123,11 @@ function Sidebar({ paginaAtual, setPagina, aberto, setAberto }) {
                             minHeight: '48px',
                         }}
                     >
-                        <ListItemIcon sx={{ color: "#fff", minWidth: "40px", display: 'flex', justifyContent: 'center' }}>
+                        <ListItemIcon sx={{ minWidth: "40px", display: 'flex', justifyContent: 'center' }}>
                             <PeopleIcon />
                         </ListItemIcon>
                         <Box sx={textContainerStyle}>
-                            <ListItemText primary={t("menu.pacientes")} sx={{ color: "#fff", m: 0 }} />
+                            <ListItemText primary={t("menu.pacientes")} sx={{ m: 0 }} />
                         </Box>
                     </ListItemButton>
                 </ListItem>
@@ -141,18 +139,18 @@ function Sidebar({ paginaAtual, setPagina, aberto, setAberto }) {
                     <ListItemButton
                         onClick={toggleIdioma}
                         sx={{
-                            "&:hover": { background: "#2a2a3e" },
+                            "&:hover": { background: "#f1f8f1" },
                             borderRadius: "8px",
-                            margin: "4px 8px",           // mesma margem
+                            margin: "4px 8px",
                             justifyContent: "flex-start",
-                            px: .4,                      // mesmo padding
+                            px: .4,
                             minHeight: '48px',
-                            border: "1px solid #444",
+                            border: "1px solid #e0e7e1",
                         }}
                     >
                         <ListItemIcon
                             sx={{
-                                color: "#fff",
+                                color: "#78909c",
                                 minWidth: "40px",
                                 display: 'flex',
                                 justifyContent: 'center',
@@ -164,7 +162,7 @@ function Sidebar({ paginaAtual, setPagina, aberto, setAberto }) {
                         <Box sx={textContainerStyle}>
                             <ListItemText
                                 primary={i18n.language === "pt" ? "Português" : "English"}
-                                sx={{ color: "#aaa", m: 0 }}   // cor cinza para diferenciar
+                                sx={{ color: "#78909c", m: 0 }} 
                             />
                         </Box>
                     </ListItemButton>

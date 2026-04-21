@@ -9,21 +9,34 @@ function App() {
     const [aberto, setAberto] = useState(false);
 
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-            <Sidebar
-                paginaAtual={pagina}
-                setPagina={setPagina}
-                aberto={aberto}
-                setAberto={setAberto}
-            />
+        <Box sx={{ 
+    display: 'flex', 
+    height: '100vh',
+    width: '100vw', 
+    overflow: 'hidden'
+}}>
+    <Sidebar
+        paginaAtual={pagina}
+        setPagina={setPagina}
+        aberto={aberto}
+        setAberto={setAberto}
+    />
 
-            <Box
-                sx={{ flex: 1, transition: 'margin 0.3s' }}
-            >
-                {pagina === 'medicos' && <Medicos />}
-                {pagina === 'pacientes' && <Pacientes />}
-            </Box>
+    <Box component="main" sx={{
+        flexGrow: 1,
+        height: '100vh',
+        overflowY: 'auto',
+        background: '#f7f6fb',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    }}>
+        <Box sx={{ width: '100%' }}>
+            {pagina === 'medicos' && <Medicos />}
+            {pagina === 'pacientes' && <Pacientes />}
         </Box>
+    </Box>
+</Box>
     );
 }
 

@@ -27,6 +27,8 @@ export default {
         crmTamanho: 'O CRM deve ter 6 dígitos',
         ufObrigatorio: 'Selecione uma UF',
         salvando: 'Salvando...',
+        registrado: 'médico registrado',
+        registrados: 'médicos registrados',
     },
     pacientes: {
         titulo: 'Pacientes',
@@ -47,5 +49,12 @@ export default {
         erroSalvar: 'Erro ao salvar paciente',
         erroDeletar: 'Erro ao deletar paciente',
         confirmDeletar: 'Deseja deletar este paciente?',
+        nomeObrigatorio: 'O nome é obrigatório',
+        dataObrigatoria: 'A data de nascimento é obrigatória',
+        carteirinhaObrigatoria: 'A carteirinha é obrigatória',
+        cpfInvalido: 'CPF deve ter 11 dígitos',
+        salvando: 'Salvando...',
+        registrado: 'paciente registrado',
+        registrados: 'pacientes registrados',
     },
 };
