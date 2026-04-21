@@ -143,3 +143,13 @@ src/
 - **Validação de formulários** — schemas Zod integrados ao React Hook Form com mensagens de erro localizadas
 - **Internacionalização** — suporte a português (pt-BR) e inglês (en), com troca dinâmica de idioma
 - **Feedback visual** — toasts de sucesso, erro e aviso, além de diálogos de confirmação para ações destrutivas
+
+## 🔗 Integração dos serviços
+
+Para o funcionamento completo da aplicação, é necessário executar:
+
+1. Backend PHP (porta 8000)
+2. Backend Node.js (porta 3000)
+3. Frontend React
+
+Certifique-se de configurar corretamente as variáveis de ambiente do frontend com as URLs das APIs.
