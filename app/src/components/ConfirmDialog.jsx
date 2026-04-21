@@ -1,29 +1,31 @@
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogContentText,
-    DialogActions,
-    Button,
-} from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogContentText } from '@mui/material';
+import DialogActionButtons from './ui/DialogActionButtons';
 
-function ConfirmDialog({ aberto, mensagem, onConfirm, onCancel }) {
-    return (
-        <Dialog open={aberto} onClose={onCancel}>
-            <DialogTitle>Confirmação</DialogTitle>
-            <DialogContent>
-                <DialogContentText>{mensagem}</DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={onCancel} variant="outlined">
-                    Cancelar
-                </Button>
-                <Button onClick={onConfirm} variant="contained" color="error" autoFocus>
-                    Confirmar
-                </Button>
-            </DialogActions>
-        </Dialog>
-    );
+function ConfirmDialog({
+  aberto,
+  titulo = 'Confirmação',
+  mensagem,
+  textoConfirmar = 'Confirmar',
+  textoCancelar = 'Cancelar',
+  onConfirm,
+  onCancel,
+}) {
+  return (
+    <Dialog open={aberto} onClose={onCancel} fullWidth maxWidth="xs">
+      <DialogTitle sx={{ fontWeight: 700, color: '#2f3f35' }}>{titulo}</DialogTitle>
+      <DialogContent>
+        <DialogContentText sx={{ color: '#5f6f65' }}>{mensagem}</DialogContentText>
+      </DialogContent>
+      <DialogActionButtons
+        onCancel={onCancel}
+        onConfirm={onConfirm}
+        cancelLabel={textoCancelar}
+        confirmLabel={textoConfirmar}
+        confirmType="button"
+        isDestructive
+      />
+    </Dialog>
+  );
 }
 
 export default ConfirmDialog;

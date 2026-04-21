@@ -29,6 +29,7 @@ export default {
         salvando: 'Salvando...',
         registrado: 'médico registrado',
         registrados: 'médicos registrados',
+        nenhumRegistrado: 'Nenhum médico cadastrado',
     },
     pacientes: {
         titulo: 'Pacientes',
@@ -56,5 +57,6 @@ export default {
         salvando: 'Salvando...',
         registrado: 'paciente registrado',
         registrados: 'pacientes registrados',
+        nenhumRegistrado: 'Nenhum paciente cadastrado',
     },
 };

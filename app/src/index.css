@@ -49,3 +49,19 @@ h2 {
   font-size: 24px;
   margin-bottom: 8px;
 }
+
+.MuiPickersOutlinedInput-root.Mui-focused .MuiPickersOutlinedInput-notchedOutline {
+  border-color: #2e7d32 !important;
+}
+
+.MuiPickersOutlinedInput-root.Mui-focused {
+  border-radius: 10px;
+}
+
+.MuiPickersOutlinedInput-root {
+  border-radius: 10px;
+}
+
+.MuiPickersTextField-root .Mui-focused {
+  color: #2e7d32 !important;
+}
