@@ -10,6 +10,7 @@ import { getPacienteSchema } from '../schemas/pacienteSchema';
 import {
   Box, Button, TextField, Typography,
   TableCell, TableRow, CircularProgress,
+  useMediaQuery, useTheme,
 } from '@mui/material';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
@@ -19,12 +20,15 @@ import EditPacienteDialog from '../components/EditPacienteDialog';
 import PageHeader from '../components/ui/PageHeader';
 import DataTable from '../components/ui/DataTable';
 import RowActionButtons from '../components/ui/RowActionButtons';
+import MobileCard from '../components/ui/MobileCard';
 import { sxCard, sxPrimaryBtn, sxField } from '../constants/muiStyles';
 
 const defaultValues = { nome: '', dataNascimento: '', carteirinha: '', cpf: '' };
 
 function Pacientes() {
   const { t } = useTranslation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [pacientes, setPacientes] = useState([]);
   const [recarregar, setRecarregar] = useState(0);
   const [formKey, setFormKey] = useState(0);
@@ -105,50 +109,35 @@ function Pacientes() {
   ];
 
   return (
-    <Box
-      sx={{
-        padding: "32px",
-        flex: 1,
-        background: "#f8faf8",
-        minHeight: "100vh",
-      }}
-    >
+    <Box sx={{ padding: { xs: '16px', sm: '32px' }, flex: 1, background: '#f8faf8', minHeight: '100vh' }}>
+
       <PageHeader
-        icon={<PeopleAltIcon sx={{ color: "#fff", fontSize: 28 }} />}
-        titulo={t("pacientes.titulo")}
+        icon={<PeopleAltIcon sx={{ color: '#fff', fontSize: 28 }} />}
+        titulo={t('pacientes.titulo')}
         count={pacientes.length}
-        registrado={t("pacientes.registrado")}
-        registrados={t("pacientes.registrados")}
+        registrado={t('pacientes.registrado')}
+        registrados={t('pacientes.registrados')}
       />
 
       <Box sx={sxCard}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2.5 }}>
-          <PersonAddAltIcon sx={{ color: "#2e7d32", fontSize: 20 }} />
-          <Typography
-            variant="subtitle1"
-            sx={{ fontWeight: 600, color: "#2f3f35" }}
-          >
-            {t("pacientes.cadastrar")}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5 }}>
+          <PersonAddAltIcon sx={{ color: '#2e7d32', fontSize: 20 }} />
+          <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#2f3f35' }}>
+            {t('pacientes.cadastrar')}
           </Typography>
         </Box>
         <Box
           key={formKey}
           component="form"
           onSubmit={handleSubmit(onSubmit)}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-            maxWidth: 400,
-          }}
+          sx={{ display: 'flex', flexDirection: 'column', gap: 2, maxWidth: 400 }}
         >
           <TextField
-            {...register("nome")}
-            label={t("pacientes.nome")}
+            {...register('nome')}
+            label={t('pacientes.nome')}
             error={!!errors.nome}
             helperText={errors.nome?.message}
-            fullWidth
-            size="small"
+            fullWidth size="small"
             sx={sxField}
           />
           <Controller
@@ -156,15 +145,13 @@ function Pacientes() {
             control={control}
             render={({ field: { onChange, value } }) => (
               <DatePicker
-                label={t("pacientes.dataNascimento")}
+                label={t('pacientes.dataNascimento')}
                 value={value ? dayjs(value) : null}
-                onChange={(date) =>
-                  onChange(date ? date.format("YYYY-MM-DD") : "")
-                }
+                onChange={(date) => onChange(date ? date.format('YYYY-MM-DD') : '')}
                 format="DD/MM/YYYY"
                 slotProps={{
                   textField: {
-                    size: "small",
+                    size: 'small',
                     fullWidth: true,
                     error: !!errors.dataNascimento,
                     helperText: errors.dataNascimento?.message,
@@ -175,12 +162,11 @@ function Pacientes() {
             )}
           />
           <TextField
-            {...register("carteirinha")}
-            label={t("pacientes.carteirinha")}
+            {...register('carteirinha')}
+            label={t('pacientes.carteirinha')}
             error={!!errors.carteirinha}
             helperText={errors.carteirinha?.message}
-            fullWidth
-            size="small"
+            fullWidth size="small"
             sx={sxField}
           />
           <Controller
@@ -194,89 +180,83 @@ function Pacientes() {
                 getInputRef={ref}
                 onValueChange={(values) => onChange(values.value)}
                 customInput={TextField}
-                label={t("pacientes.cpf")}
+                label={t('pacientes.cpf')}
                 error={!!errors.cpf}
                 helperText={errors.cpf?.message}
-                fullWidth
-                size="small"
+                fullWidth size="small"
                 sx={sxField}
               />
             )}
           />
           <Button
-            type="submit"
-            variant="contained"
-            disabled={isSubmitting}
-            fullWidth
+            type="submit" variant="contained" disabled={isSubmitting} fullWidth
             sx={sxPrimaryBtn}
-            startIcon={
-              isSubmitting ? (
-                <CircularProgress size={16} color="inherit" />
-              ) : null
-            }
+            startIcon={isSubmitting ? <CircularProgress size={16} color="inherit" /> : null}
           >
-            {isSubmitting ? t("pacientes.salvando") : t("pacientes.cadastrar")}
+            {isSubmitting ? t('pacientes.salvando') : t('pacientes.cadastrar')}
           </Button>
         </Box>
       </Box>
 
       {carregando ? (
-        <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
-          <CircularProgress sx={{ color: "#2e7d32" }} />
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+          <CircularProgress sx={{ color: '#2e7d32' }} />
         </Box>
       ) : pacientes.length === 0 ? (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            py: 8,
-            gap: 1,
-            background: "#fff",
-            borderRadius: "16px",
-            border: "1px solid #e0e7e1",
-            boxShadow: "0 2px 12px rgba(46,125,50,0.08)",
-          }}
-        >
-          <PeopleAltIcon sx={{ fontSize: 48, color: "#c8e6c9" }} />
-          <Typography sx={{ color: "#78909c", fontWeight: 500 }}>
-            {t("pacientes.nenhumRegistrado")}
+        <Box sx={{
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          justifyContent: 'center', py: 8, gap: 1,
+          background: '#fff', borderRadius: '16px',
+          border: '1px solid #e0e7e1',
+          boxShadow: '0 2px 12px rgba(46,125,50,0.08)',
+        }}>
+          <PeopleAltIcon sx={{ fontSize: 48, color: '#c8e6c9' }} />
+          <Typography sx={{ color: '#78909c', fontWeight: 500 }}>
+            {t('pacientes.nenhumRegistrado')}
           </Typography>
+        </Box>
+      ) : isMobile ? (
+        <Box>
+          {pacientes.map((paciente) => (
+            <MobileCard
+              key={paciente.id}
+              fields={[
+                { label: t('pacientes.nome'), value: paciente.nome },
+                { label: t('pacientes.dataNascimento'), value: paciente.dataNascimento ? new Date(paciente.dataNascimento).toLocaleDateString('pt-BR') : '-' },
+                { label: t('pacientes.carteirinha'), value: paciente.carteirinha },
+                { label: t('pacientes.cpf'), value: <Typography sx={{ fontFamily: 'monospace', letterSpacing: '0.03em', fontSize: '0.9rem' }}>{paciente.cpf}</Typography> },
+              ]}
+              actions={
+                <RowActionButtons
+                  onEditar={() => handleEditarClick(paciente)}
+                  onDeletar={() => handleDeletarClick(paciente.id)}
+                  editarLabel={t('pacientes.editar')}
+                  deletarLabel={t('pacientes.deletar')}
+                />
+              }
+            />
+          ))}
         </Box>
       ) : (
         <DataTable columns={columns}>
           {pacientes.map((paciente, index) => (
-            <TableRow
-              key={paciente.id}
-              sx={{
-                background: index % 2 === 0 ? "#fff" : "#f1f8f1",
-                "&:hover": { background: "#e8f5e9" },
-                transition: "background 0.15s ease",
-              }}
-            >
-              <TableCell sx={{ fontWeight: 500, color: "#2f3f35" }}>
-                {paciente.nome}
-              </TableCell>
-              <TableCell sx={{ color: "#2e7d32", fontWeight: 500 }}>
-                {paciente.dataNascimento
-                  ? new Date(paciente.dataNascimento).toLocaleDateString(
-                      "pt-BR",
-                    )
-                  : "-"}
+            <TableRow key={paciente.id} sx={{
+              background: index % 2 === 0 ? '#fff' : '#f1f8f1',
+              '&:hover': { background: '#e8f5e9' },
+              transition: 'background 0.15s ease',
+            }}>
+              <TableCell sx={{ fontWeight: 500, color: '#2f3f35' }}>{paciente.nome}</TableCell>
+              <TableCell sx={{ color: '#2e7d32', fontWeight: 500 }}>
+                {paciente.dataNascimento ? new Date(paciente.dataNascimento).toLocaleDateString('pt-BR') : '-'}
               </TableCell>
               <TableCell>{paciente.carteirinha}</TableCell>
-              <TableCell
-                sx={{ fontFamily: "monospace", letterSpacing: "0.03em" }}
-              >
-                {paciente.cpf}
-              </TableCell>
+              <TableCell sx={{ fontFamily: 'monospace', letterSpacing: '0.03em' }}>{paciente.cpf}</TableCell>
               <TableCell align="center">
                 <RowActionButtons
                   onEditar={() => handleEditarClick(paciente)}
                   onDeletar={() => handleDeletarClick(paciente.id)}
-                  editarLabel={t("pacientes.editar")}
-                  deletarLabel={t("pacientes.deletar")}
+                  editarLabel={t('pacientes.editar')}
+                  deletarLabel={t('pacientes.deletar')}
                 />
               </TableCell>
             </TableRow>
@@ -284,25 +264,9 @@ function Pacientes() {
         </DataTable>
       )}
 
-      <Toast
-        aberto={toast.aberto}
-        mensagem={toast.mensagem}
-        tipo={toast.tipo}
-        onClose={closeToast}
-      />
-      <ConfirmDialog
-        aberto={confirm.aberto}
-        mensagem={t("pacientes.confirmDeletar")}
-        onConfirm={handleConfirmDeletar}
-        onCancel={handleCancelDeletar}
-      />
-      <EditPacienteDialog
-        aberto={editPacienteDialog.aberto}
-        paciente={editPacienteDialog.paciente}
-        onConfirm={handleConfirmEditar}
-        onCancel={handleCancelEditar}
-        t={t}
-      />
+      <Toast aberto={toast.aberto} mensagem={toast.mensagem} tipo={toast.tipo} onClose={closeToast} />
+      <ConfirmDialog aberto={confirm.aberto} mensagem={t('pacientes.confirmDeletar')} onConfirm={handleConfirmDeletar} onCancel={handleCancelDeletar} />
+      <EditPacienteDialog aberto={editPacienteDialog.aberto} paciente={editPacienteDialog.paciente} onConfirm={handleConfirmEditar} onCancel={handleCancelEditar} t={t} />
     </Box>
   );
 }

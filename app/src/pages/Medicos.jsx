@@ -8,6 +8,7 @@ import { getMedicoSchema } from '../schemas/medicoSchema';
 import {
   Box, Button, TextField, MenuItem, Typography,
   TableCell, TableRow, CircularProgress, Chip,
+  useMediaQuery, useTheme,
 } from '@mui/material';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
@@ -17,6 +18,7 @@ import EditMedicoDialog from '../components/EditMedicoDialog';
 import PageHeader from '../components/ui/PageHeader';
 import DataTable from '../components/ui/DataTable';
 import RowActionButtons from '../components/ui/RowActionButtons';
+import MobileCard from '../components/ui/MobileCard';
 import { sxCard, sxPrimaryBtn, sxField } from '../constants/muiStyles';
 
 const ESTADOS_BR = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
@@ -25,6 +27,8 @@ const defaultValues = { nome: '', CRM: '', UFCRM: '' };
 
 function Medicos() {
   const { t } = useTranslation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [medicos, setMedicos] = useState([]);
   const [recarregar, setRecarregar] = useState(0);
   const [formKey, setFormKey] = useState(0);
@@ -104,7 +108,7 @@ function Medicos() {
   ];
 
   return (
-    <Box sx={{ padding: '32px', flex: 1, background: '#f8faf8', minHeight: '100vh' }}>
+    <Box sx={{ padding: { xs: '16px', sm: '32px' }, flex: 1, background: '#f8faf8', minHeight: '100vh' }}>
 
       <PageHeader
         icon={<LocalHospitalIcon sx={{ color: '#fff', fontSize: 28 }} />}
@@ -189,6 +193,27 @@ function Medicos() {
           <Typography sx={{ color: '#78909c', fontWeight: 500 }}>
             {t('medicos.nenhumRegistrado')}
           </Typography>
+        </Box>
+      ) : isMobile ? (
+        <Box>
+          {medicos.map((medico) => (
+            <MobileCard
+              key={medico.id}
+              fields={[
+                { label: t('medicos.nome'), value: <Typography sx={{ fontWeight: 600, color: '#2f3f35' }}>{medico.nome}</Typography> },
+                { label: t('medicos.crm'), value: <Typography sx={{ color: '#2e7d32', fontWeight: 600 }}>{medico.CRM}</Typography> },
+                { label: t('medicos.uf'), value: <Chip label={medico.UFCRM} size="small" sx={{ background: '#e8f5e9', color: '#2e7d32', fontWeight: 700, fontSize: '0.78rem' }} /> },
+              ]}
+              actions={
+                <RowActionButtons
+                  onEditar={() => handleEditarClick(medico)}
+                  onDeletar={() => handleDeletarClick(medico.id)}
+                  editarLabel={t('medicos.editar')}
+                  deletarLabel={t('medicos.deletar')}
+                />
+              }
+            />
+          ))}
         </Box>
       ) : (
         <DataTable columns={columns}>

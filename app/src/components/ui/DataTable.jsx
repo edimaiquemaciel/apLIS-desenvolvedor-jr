@@ -23,19 +23,13 @@ function DataTable({ columns, children }) {
         <TableHead>
           <TableRow sx={{ background: 'linear-gradient(135deg, #2e7d32 0%, #4caf50 100%)' }}>
             {columns.map((col, i) => (
-              <TableCell
-                key={i}
-                align={col.align || 'left'}
-                sx={sxHeaderCell}
-              >
+              <TableCell key={i} align={col.align || 'left'} sx={sxHeaderCell}>
                 {col.label}
               </TableCell>
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>
-          {children}
-        </TableBody>
+        <TableBody>{children}</TableBody>
       </Table>
     </TableContainer>
   );
